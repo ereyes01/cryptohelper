@@ -31,12 +31,14 @@ var _ = Describe("Cryptohelper", func() {
 	})
 
 	Describe("Encrypting/decrypting text", func() {
-		It("Returns an error if given an invalid key", func() {
+		It("Returns an error if Encrypt is given an invalid key", func() {
 			_, err := Encrypt("", "")
 			Expect(err).To(MatchError("Invalid key: must be 32 bytes " +
 				"b64-encoded"))
+		})
 
-			_, err = Decrypt("", "")
+		It("Returns an error if Decrypt is given an invalid key", func() {
+			_, err := Decrypt("", "")
 			Expect(err).To(MatchError("Invalid key: must be 32 bytes " +
 				"b64-encoded"))
 		})
