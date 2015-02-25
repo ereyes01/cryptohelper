@@ -29,6 +29,51 @@ var _ = Describe("Cryptohelper", func() {
 			Expect(decode1).ToNot(Equal(decode2))
 		})
 	})
+
+	Describe("Encrypting/decrypting text", func() {
+		It("Returns an error if given an invalid key", func() {
+			_, err := Encrypt("", "")
+			Expect(err).To(MatchError("Invalid key: must be 32 bytes " +
+				"b64-encoded"))
+
+			_, err = Decrypt("", "")
+			Expect(err).To(MatchError("Invalid key: must be 32 bytes " +
+				"b64-encoded"))
+		})
+
+		It("Encrypts a message and decrypts it back", func() {
+			message := "hello"
+
+			key, err := RandomKey()
+			Expect(err).To(BeNil())
+
+			ciphertext, err := Encrypt(message, key)
+			Expect(err).To(BeNil())
+
+			plaintext, err := Decrypt(ciphertext, key)
+			Expect(err).To(BeNil())
+			Expect(plaintext).To(Equal(message))
+		})
+
+		It("Fails HMAC when the ciphertext is tampered with", func() {
+			message := "hello"
+
+			key, err := RandomKey()
+			Expect(err).To(BeNil())
+
+			ciphertext, err := Encrypt(message, key)
+			Expect(err).To(BeNil())
+
+			// remove the last byte from the cipher text
+			cipherBytes, err := base64.StdEncoding.DecodeString(ciphertext)
+			Expect(err).To(BeNil())
+			cipherBytes = cipherBytes[:len(cipherBytes)-1]
+			tampered := base64.StdEncoding.EncodeToString(cipherBytes)
+
+			_, err = Decrypt(tampered, key)
+			Expect(err).To(MatchError("Ciphertext failed to authenticate HMAC"))
+		})
+	})
 })
 
 func TestCryptohelper(t *testing.T) {
