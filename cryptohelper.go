@@ -16,7 +16,6 @@
 //
 // This page claims there's a negligible collision risk when randomly
 // generating nonces: http://nacl.cr.yp.to/secretbox.html
-
 package cryptohelper
 
 import (
