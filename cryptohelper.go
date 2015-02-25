@@ -9,9 +9,9 @@
 // This package basically does the following:
 //  - Implements a 256-bit random key generator using Go's rand library.
 //  - Wraps the secretbox Open/Seal routines with functions that read and write
-// base64-encoded data
+//    base64-encoded data
 //  - When encrypting, randomly generates a 24-bit nonce and prepends it to the
-// ciphertext, which altogether is encoded in the b64 buffer.
+//    ciphertext, which altogether is encoded in the b64 buffer.
 //  - When decrypting split the enbedded nonce from the ciphertext.
 //
 // This page claims there's a negligible collision risk when randomly
