@@ -68,6 +68,14 @@ func Encrypt(plaintext string, key string) (string, error) {
 
 	copy(keyArr[:], keyBytes)
 
+	// This page claims there's a negligible collision risk when randomly
+	// generating nonces: http://nacl.cr.yp.to/secretbox.html
+	if _, err := rand.Read(nonce[:]); err != nil {
+		return "", err
+	}
+
+	// The nonce is embedded with the returned buffer:
+	// [--nonce(24by)--][--ciphertext--]
 	ciphertext := secretbox.Seal(nonce[:], []byte(plaintext), &nonce, &keyArr)
 	return base64.StdEncoding.EncodeToString(ciphertext), nil
 }

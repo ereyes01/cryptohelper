@@ -75,6 +75,21 @@ var _ = Describe("Cryptohelper", func() {
 			_, err = Decrypt(tampered, key)
 			Expect(err).To(MatchError("ciphertext failed to authenticate HMAC"))
 		})
+
+		It("Ensures that the ciphertext contains a randomized nonce", func() {
+			message := "hello"
+
+			key, err := RandomKey()
+			Expect(err).To(BeNil())
+
+			cipher1, err := Encrypt(message, key)
+			Expect(err).To(BeNil())
+
+			cipher2, err := Encrypt(message, key)
+			Expect(err).To(BeNil())
+
+			Expect(cipher1).ToNot(Equal(cipher2))
+		})
 	})
 })
 
