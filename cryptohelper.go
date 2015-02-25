@@ -52,10 +52,10 @@ func decodeKey(key string) ([]byte, error) {
 	return keyBytes, nil
 }
 
-// Encrypt returns a b64-encoded buffer consisting of a random 24-bit nonce
-// followed by the ciphertext encrypted with the given key using NaCl's
+// SecretboxEncrypt returns a b64-encoded buffer consisting of a random 24-bit
+// nonce followed by the ciphertext encrypted with the given key using NaCl's
 // secretbox implementation. The given key must be a b64-encoded 32-byte buffer.
-func Encrypt(plaintext string, key string) (string, error) {
+func SecretboxEncrypt(plaintext string, key string) (string, error) {
 	var (
 		keyArr [32]byte
 		nonce  [24]byte
@@ -80,16 +80,16 @@ func Encrypt(plaintext string, key string) (string, error) {
 	return base64.StdEncoding.EncodeToString(ciphertext), nil
 }
 
-// Decrypt accepts a b64-encoded buffer consisting of a random 24-bit nonce
-// followed by the ciphertext, and a b64-encoded 32-byte buffer containing the
-// encryption key. The function will use NaCl's secretbox implementation to
+// SecretboxDecrypt accepts a b64-encoded buffer consisting of a random 24-bit
+// nonce followed by the ciphertext, and a b64-encoded 32-byte buffer containing
+// the encryption key. The function will use NaCl's secretbox implementation to
 // decrypt the ciphertext with the embedded nonce. The plaintext is returned in
 // the absence of errors.
 //
 // NaCl includes an HMAC within the ciphertext- if the ciphertext is tampered
 // with, the HMAC authentication fails, and this function will return an error
 // informing you of that.
-func Decrypt(ciphertext string, key string) (string, error) {
+func SecretboxDecrypt(ciphertext string, key string) (string, error) {
 	var (
 		keyArr [32]byte
 		nonce  [24]byte

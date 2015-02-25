@@ -32,13 +32,13 @@ var _ = Describe("Cryptohelper", func() {
 
 	Describe("Encrypting/decrypting text", func() {
 		It("Returns an error if Encrypt is given an invalid key", func() {
-			_, err := Encrypt("", "")
+			_, err := SecretboxEncrypt("", "")
 			Expect(err).To(MatchError("invalid key: must be 32 bytes " +
 				"b64-encoded"))
 		})
 
 		It("Returns an error if Decrypt is given an invalid key", func() {
-			_, err := Decrypt("", "")
+			_, err := SecretboxDecrypt("", "")
 			Expect(err).To(MatchError("invalid key: must be 32 bytes " +
 				"b64-encoded"))
 		})
@@ -49,10 +49,10 @@ var _ = Describe("Cryptohelper", func() {
 			key, err := RandomKey()
 			Expect(err).To(BeNil())
 
-			ciphertext, err := Encrypt(message, key)
+			ciphertext, err := SecretboxEncrypt(message, key)
 			Expect(err).To(BeNil())
 
-			plaintext, err := Decrypt(ciphertext, key)
+			plaintext, err := SecretboxDecrypt(ciphertext, key)
 			Expect(err).To(BeNil())
 			Expect(plaintext).To(Equal(message))
 		})
@@ -63,7 +63,7 @@ var _ = Describe("Cryptohelper", func() {
 			key, err := RandomKey()
 			Expect(err).To(BeNil())
 
-			ciphertext, err := Encrypt(message, key)
+			ciphertext, err := SecretboxEncrypt(message, key)
 			Expect(err).To(BeNil())
 
 			// remove the last byte from the cipher text
@@ -72,7 +72,7 @@ var _ = Describe("Cryptohelper", func() {
 			cipherBytes = cipherBytes[:len(cipherBytes)-1]
 			tampered := base64.StdEncoding.EncodeToString(cipherBytes)
 
-			_, err = Decrypt(tampered, key)
+			_, err = SecretboxDecrypt(tampered, key)
 			Expect(err).To(MatchError("ciphertext failed to authenticate HMAC"))
 		})
 
@@ -82,10 +82,10 @@ var _ = Describe("Cryptohelper", func() {
 			key, err := RandomKey()
 			Expect(err).To(BeNil())
 
-			cipher1, err := Encrypt(message, key)
+			cipher1, err := SecretboxEncrypt(message, key)
 			Expect(err).To(BeNil())
 
-			cipher2, err := Encrypt(message, key)
+			cipher2, err := SecretboxEncrypt(message, key)
 			Expect(err).To(BeNil())
 
 			Expect(cipher1).ToNot(Equal(cipher2))
