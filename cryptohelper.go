@@ -46,7 +46,7 @@ func decodeKey(key string) ([]byte, error) {
 	}
 
 	if len(keyBytes) != 32 {
-		return nil, errors.New("Invalid key: must be 32 bytes b64-encoded")
+		return nil, errors.New("invalid key: must be 32 bytes b64-encoded")
 	}
 
 	return keyBytes, nil
@@ -102,7 +102,7 @@ func Decrypt(ciphertext string, key string) (string, error) {
 
 	plaintext, ok := secretbox.Open([]byte{}, cipherBytes[24:], &nonce, &keyArr)
 	if !ok {
-		return "", errors.New("Ciphertext failed to authenticate HMAC")
+		return "", errors.New("ciphertext failed to authenticate HMAC")
 	}
 
 	return string(plaintext), nil

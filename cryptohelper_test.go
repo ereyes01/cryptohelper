@@ -33,13 +33,13 @@ var _ = Describe("Cryptohelper", func() {
 	Describe("Encrypting/decrypting text", func() {
 		It("Returns an error if Encrypt is given an invalid key", func() {
 			_, err := Encrypt("", "")
-			Expect(err).To(MatchError("Invalid key: must be 32 bytes " +
+			Expect(err).To(MatchError("invalid key: must be 32 bytes " +
 				"b64-encoded"))
 		})
 
 		It("Returns an error if Decrypt is given an invalid key", func() {
 			_, err := Decrypt("", "")
-			Expect(err).To(MatchError("Invalid key: must be 32 bytes " +
+			Expect(err).To(MatchError("invalid key: must be 32 bytes " +
 				"b64-encoded"))
 		})
 
@@ -73,7 +73,7 @@ var _ = Describe("Cryptohelper", func() {
 			tampered := base64.StdEncoding.EncodeToString(cipherBytes)
 
 			_, err = Decrypt(tampered, key)
-			Expect(err).To(MatchError("Ciphertext failed to authenticate HMAC"))
+			Expect(err).To(MatchError("ciphertext failed to authenticate HMAC"))
 		})
 	})
 })
